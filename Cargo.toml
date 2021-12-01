@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+color-eyre = "0.5.11"
+tracing = "0.1.29"
+tracing-subscriber = { version = "0.3.3", features = [ "std", "env-filter" ] }
+structopt = "0.3.25"
