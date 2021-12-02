@@ -8,6 +8,7 @@ use tracing::debug;
 use tracing_subscriber::EnvFilter;
 
 mod day1;
+mod day2;
 
 #[derive(Debug, StructOpt)]
 #[structopt()]
@@ -24,7 +25,7 @@ struct Options {
 
 fn set_up_logging(debug: bool) -> Result<(), Report> {
     if std::env::var("RUST_LIB_BACKTRACE").is_err() && debug {
-        std::env::set_var("RUST_LIB_BACKTRACE", "1" );
+        std::env::set_var("RUST_LIB_BACKTRACE", "full" );
     }
 
     color_eyre::install()?;
@@ -56,7 +57,8 @@ fn main() -> Result<(), Report> {
     debug!("{file:?}: read {count} lines", file=options.input, count=lines.len());
 
     match options.puzzle {
-        1 => day1::part1(&lines)?,
+        1 => day1::solve(&lines)?,
+        2 => day2::solve(&lines)?,
         _ => panic!("No such puzzle: {day}", day=options.puzzle)
     }
 

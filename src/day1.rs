@@ -2,7 +2,7 @@ use color_eyre::Report;
 use itertools::Itertools;
 use tracing::info;
 
-pub(crate) fn part1(lines: &[String]) -> Result<(), Report> {
+pub(crate) fn solve(lines: &[String]) -> Result<(), Report> {
 
     let numbers: Vec<u32> = lines.iter().map(|l| l.parse::<u32>()).collect::<Result<Vec<_>, _>>()?;
     let part1 = numbers.iter()
