@@ -9,6 +9,7 @@ use tracing_subscriber::EnvFilter;
 
 mod day1;
 mod day2;
+mod day3;
 
 #[derive(Debug, StructOpt)]
 #[structopt()]
@@ -59,6 +60,7 @@ fn main() -> Result<(), Report> {
     match options.puzzle {
         1 => day1::solve(&lines)?,
         2 => day2::solve(&lines)?,
+        3 => day3::solve(&lines)?,
         _ => panic!("No such puzzle: {day}", day=options.puzzle)
     }
 
