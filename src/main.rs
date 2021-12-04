@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File, read_to_string};
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
@@ -10,6 +10,7 @@ use tracing_subscriber::EnvFilter;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 #[derive(Debug, StructOpt)]
 #[structopt()]
@@ -42,25 +43,19 @@ fn set_up_logging(debug: bool) -> Result<(), Report> {
     Ok(())
 }
 
-fn read_lines(filename: &Path) -> Result<Vec<String>, Report> {
-    Ok(BufReader::new(File::open(filename)?)
-        .lines()
-        .collect::<Result<Vec<String>, _>>()?
-    )
-}
-
 fn main() -> Result<(), Report> {
     let options = Options::from_args();
     set_up_logging(options.debug)?;
 
-    let lines = read_lines(&options.input)?;
+    let input = read_to_string(&options.input)?;
 
-    debug!("{file:?}: read {count} lines", file=options.input, count=lines.len());
+    debug!("{file:?}: read {count} bytes", file=options.input, count=input.len());
 
     match options.puzzle {
-        1 => day1::solve(&lines)?,
-        2 => day2::solve(&lines)?,
-        3 => day3::solve(&lines)?,
+        1 => day1::solve(input)?,
+        2 => day2::solve(input)?,
+        3 => day3::solve(input)?,
+        4 => day4::solve(input)?,
         _ => panic!("No such puzzle: {day}", day=options.puzzle)
     }
 

@@ -1,15 +1,14 @@
 use color_eyre::Report;
 use itertools::Itertools;
+use nom::{character, IResult};
 use nom::branch::alt;
-use tracing::{error, info};
-
-use nom::Finish;
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace1;
-use nom::combinator::{complete, recognize};
+use nom::combinator::complete;
 use nom::error::context;
-use nom::{character, IResult};
+use nom::Finish;
 use nom::sequence::tuple;
+use tracing::info;
 
 #[derive(Debug)]
 enum Direction {
@@ -73,7 +72,8 @@ fn direction_parser(i: &str) -> IResult<&str, Direction> {
         }))
 }
 
-pub(crate) fn solve(lines: &[String]) -> Result<(), Report> {
+pub(crate) fn solve(input: String) -> Result<(), Report> {
+    let lines: Vec<_> = input.split("\n").collect();
     let mut directions = Vec::with_capacity(lines.len());
     for line in lines {
         match direction_parser(line) {
