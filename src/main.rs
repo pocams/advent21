@@ -1,6 +1,5 @@
-use std::fs::{File, read_to_string};
-use std::io::{BufRead, BufReader};
-use std::path::{Path, PathBuf};
+use std::fs::read_to_string;
+use std::path::PathBuf;
 
 use color_eyre::Report;
 use structopt::StructOpt;
@@ -11,6 +10,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 
 #[derive(Debug, StructOpt)]
 #[structopt()]
@@ -56,6 +56,7 @@ fn main() -> Result<(), Report> {
         2 => day2::solve(input)?,
         3 => day3::solve(input)?,
         4 => day4::solve(input)?,
+        5 => day5::solve(input)?,
         _ => panic!("No such puzzle: {day}", day=options.puzzle)
     }
 

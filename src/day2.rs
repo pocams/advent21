@@ -1,12 +1,10 @@
 use color_eyre::Report;
-use itertools::Itertools;
 use nom::{character, IResult};
 use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace1;
 use nom::combinator::complete;
 use nom::error::context;
-use nom::Finish;
 use nom::sequence::tuple;
 use tracing::info;
 

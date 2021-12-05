@@ -1,11 +1,10 @@
 use color_eyre::Report;
-use itertools::Itertools;
 use nom::{character, IResult};
 use nom::bytes::complete::tag;
-use nom::character::complete::{multispace0, multispace1, newline, space0};
-use nom::combinator::{all_consuming, complete, opt};
-use nom::multi::{count, many1, separated_list0, separated_list1};
-use nom::sequence::{delimited, preceded, terminated, tuple};
+use nom::character::complete::{newline, space0};
+use nom::combinator::{all_consuming, opt};
+use nom::multi::{count, many1, separated_list1};
+use nom::sequence::{delimited, terminated, tuple};
 use tracing::{debug, info};
 
 fn call_parser(i: &str) -> IResult<&str, Vec<u8>> {
