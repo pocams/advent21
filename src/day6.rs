@@ -14,7 +14,7 @@ fn iterate(counts: &mut [u64; MAX_TIMER]) {
 }
 
 pub(crate) fn solve(input: String) -> Result<(), Report> {
-    let fish = input.split(",").map(|s| i32::from_str(s)).collect::<Result<Vec<_>, _>>()?;
+    let fish = input.split(',').map(i32::from_str).collect::<Result<Vec<_>, _>>()?;
     let mut counts: [u64; MAX_TIMER] = Default::default();
 
     for f in fish {

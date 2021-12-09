@@ -3,7 +3,7 @@ use tracing::{debug, info};
 
 pub(crate) fn solve(input: String) -> Result<(), Report> {
     // let numbers = lines.iter().map(|l| u32::from_str_radix(l, 2)).collect::<Result<Vec<_>, _>>()?;
-    let numbers: Vec<Vec<u8>> = input.split("\n").map(|l| l.bytes().map(|c| c - '0' as u8).collect()).collect();
+    let numbers: Vec<Vec<u8>> = input.split('\n').map(|l| l.bytes().map(|c| c - b'0').collect()).collect();
 
     let mut column_sums = vec![0u32; numbers[0].len()];
     for number in &numbers {

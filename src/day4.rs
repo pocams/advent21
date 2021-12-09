@@ -28,7 +28,7 @@ fn board_parser(i: &str) -> IResult<&str, Vec<Vec<u8>>> {
     opt(newline))(i)
 }
 
-fn is_winning_board(board: &Vec<Vec<u8>>) -> bool {
+fn is_winning_board(board: &[Vec<u8>]) -> bool {
     for row in board {
         if row.iter().all(|c| c & 128 == 128) { return true }
     }
@@ -38,7 +38,7 @@ fn is_winning_board(board: &Vec<Vec<u8>>) -> bool {
     false
 }
 
-fn board_score(board: &Vec<Vec<u8>>) -> u32 {
+fn board_score(board: &[Vec<u8>]) -> u32 {
     board
         .iter()
         .map(|row|
@@ -72,13 +72,11 @@ pub(crate) fn solve(input: String) -> Result<(), Report> {
                 }
             }
 
-            if is_winning_board(&board) {
-                if !found_winner {
-                    debug!("Found winning board: {:?}", board);
-                    let score = board_score(&board);
-                    info!(day=4, part=1, last_called=call, board_score=score, answer=call as u32 * score);
-                    found_winner = true;
-                }
+            if is_winning_board(board) && !found_winner {
+                debug!("Found winning board: {:?}", board);
+                let score = board_score(board);
+                info!(day=4, part=1, last_called=call, board_score=score, answer=call as u32 * score);
+                found_winner = true;
             }
         }
 

@@ -71,7 +71,7 @@ fn direction_parser(i: &str) -> IResult<&str, Direction> {
 }
 
 pub(crate) fn solve(input: String) -> Result<(), Report> {
-    let lines: Vec<_> = input.split("\n").collect();
+    let lines: Vec<_> = input.split('\n').collect();
     let mut directions = Vec::with_capacity(lines.len());
     for line in lines {
         match direction_parser(line) {

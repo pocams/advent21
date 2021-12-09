@@ -82,42 +82,42 @@ pub(crate) fn solve(input: String) -> Result<(), Report> {
         let mut v = vec![""; 10];
 
         // The only 2-segment digit is 1
-        v[1] = case.all_digits.iter().find(|&n| n.len() == 2).ok_or(eyre!("1 not found"))?;
+        v[1] = case.all_digits.iter().find(|&n| n.len() == 2).ok_or_else(|| eyre!("1 not found"))?;
         debug!("1 = {}", v[1]);
         // The only 4-segment digit is 4
-        v[4] = case.all_digits.iter().find(|&n| n.len() == 4).ok_or(eyre!("4 not found"))?;
+        v[4] = case.all_digits.iter().find(|&n| n.len() == 4).ok_or_else(|| eyre!("4 not found"))?;
         debug!("4 = {}", v[4]);
         // The only 3-segment digit is 7
-        v[7] = case.all_digits.iter().find(|&n| n.len() == 3).ok_or(eyre!("7 not found"))?;
+        v[7] = case.all_digits.iter().find(|&n| n.len() == 3).ok_or_else(|| eyre!("7 not found"))?;
         debug!("7 = {}", v[7]);
         // The only 7-segment digit is 8
-        v[8] = case.all_digits.iter().find(|&n| n.len() == 7).ok_or(eyre!("8 not found"))?;
+        v[8] = case.all_digits.iter().find(|&n| n.len() == 7).ok_or_else(|| eyre!("8 not found"))?;
         debug!("8 = {}", v[8]);
 
         // The only 6-segment digit that contains only one segment of 1 is 6
-        v[6] = case.all_digits.iter().find(|&n| n.len() == 6 && n.chars().filter(|&c| v[1].contains(c)).count() == 1).ok_or(eyre!("6 not found"))?;
+        v[6] = case.all_digits.iter().find(|&n| n.len() == 6 && n.chars().filter(|&c| v[1].contains(c)).count() == 1).ok_or_else(|| eyre!("6 not found"))?;
         debug!("6 = {}", v[6]);
         // The only 6-segment digit that contains all 4 segments of 4 is 9
-        v[9] = case.all_digits.iter().find(|&n| n.len() == 6 && n.chars().filter(|&c| v[4].contains(c)).count() == 4).ok_or(eyre!("9 not found"))?;
+        v[9] = case.all_digits.iter().find(|&n| n.len() == 6 && n.chars().filter(|&c| v[4].contains(c)).count() == 4).ok_or_else(|| eyre!("9 not found"))?;
         debug!("9 = {}", v[9]);
         // The remaining 6-segment digit is 0
-        v[0] = case.all_digits.iter().find(|&n| n.len() == 6 && n != v[6] && n != v[9]).ok_or(eyre!("0 not found"))?;
+        v[0] = case.all_digits.iter().find(|&n| n.len() == 6 && n != v[6] && n != v[9]).ok_or_else(|| eyre!("0 not found"))?;
         debug!("0 = {}", v[0]);
 
         // The only 5-segment digit that contains both segments of 1 is 3
-        v[3] = case.all_digits.iter().find(|&n| n.len() == 5 && n.chars().filter(|&c| v[1].contains(c)).count() == 2).ok_or(eyre!("3 not found"))?;
+        v[3] = case.all_digits.iter().find(|&n| n.len() == 5 && n.chars().filter(|&c| v[1].contains(c)).count() == 2).ok_or_else(|| eyre!("3 not found"))?;
         debug!("3 = {}", v[3]);
         // The only 5-segment digit that is entirely contained within the segments of 6 is 5
-        v[5] = case.all_digits.iter().find(|&n| n.len() == 5 && n.chars().filter(|&c| v[6].contains(c)).count() == 5).ok_or(eyre!("5 not found"))?;
+        v[5] = case.all_digits.iter().find(|&n| n.len() == 5 && n.chars().filter(|&c| v[6].contains(c)).count() == 5).ok_or_else(|| eyre!("5 not found"))?;
         debug!("5 = {}", v[5]);
         // The remaining 5-segment digit is 2
-        v[2] = case.all_digits.iter().find(|&n| n.len() == 5 && n != v[3] && n != v[5]).ok_or(eyre!("2 not found"))?;
+        v[2] = case.all_digits.iter().find(|&n| n.len() == 5 && n != v[3] && n != v[5]).ok_or_else(|| eyre!("2 not found"))?;
         debug!("2 = {}", v[2]);
 
         let mut result = 0;
         for digit in case.display {
             result *= 10;
-            result += v.iter().position(|&n| n == digit).ok_or(eyre!("Number for {} not found!", digit))?;
+            result += v.iter().position(|&n| n == digit).ok_or_else(|| eyre!("Number for {} not found!", digit))?;
         }
 
         debug!("result: {:?}", result);

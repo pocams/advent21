@@ -4,7 +4,7 @@ use tracing::info;
 
 pub(crate) fn solve(input: String) -> Result<(), Report> {
 
-    let numbers: Vec<u32> = input.split("\n").map(|l| l.parse::<u32>()).collect::<Result<Vec<_>, _>>()?;
+    let numbers: Vec<u32> = input.split('\n').map(|l| l.parse::<u32>()).collect::<Result<Vec<_>, _>>()?;
     let part1 = numbers.iter()
         .tuple_windows()
         .filter(|(a, b)| b > a)
