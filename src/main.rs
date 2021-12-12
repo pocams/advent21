@@ -17,6 +17,7 @@ mod day8;
 mod day9;
 mod day10;
 mod day11;
+mod day12;
 
 #[derive(Debug, StructOpt)]
 #[structopt()]
@@ -69,6 +70,7 @@ fn main() -> Result<(), Report> {
         9 => day9::solve(input)?,
         10 => day10::solve(input)?,
         11 => day11::solve(input)?,
+        12 => day12::solve(input)?,
         _ => panic!("No such puzzle: {day}", day=options.puzzle)
     }
 
