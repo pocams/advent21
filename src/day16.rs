@@ -5,9 +5,9 @@ use nom::IResult;
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take};
 use nom::combinator::all_consuming;
-use nom::multi::{count, length_count, length_value, many0};
-use nom::sequence::{terminated, tuple};
-use tracing::debug;
+use nom::multi::{length_count, length_value, many0};
+use nom::sequence::tuple;
+use tracing::{debug, info};
 
 #[derive(Debug)]
 struct Packet {
@@ -15,11 +15,26 @@ struct Packet {
     content: PacketType
 }
 
+const OPERATOR_SUM: u8 = 0;
+const OPERATOR_PRODUCT: u8 = 1;
+const OPERATOR_MINIMUM: u8 = 2;
+const OPERATOR_MAXIMUM: u8 = 3;
+const OPERATOR_GREATER_THAN: u8 = 5;
+const OPERATOR_LESS_THAN: u8 = 6;
+const OPERATOR_EQUAL: u8 = 7;
+
 impl Packet {
     fn sum_of_versions(&self) -> usize {
         self.version as usize + match &self.content {
             PacketType::Operator(op) => op.subpackets.iter().map(|p| p.sum_of_versions()).sum(),
             _ => 0
+        }
+    }
+
+    fn value(&self) -> u64 {
+        match &self.content {
+            PacketType::LiteralValue(v) => v.value,
+            PacketType::Operator(o) => o.value(),
         }
     }
 }
@@ -39,6 +54,21 @@ struct LiteralValuePacket {
 struct OperatorPacket {
     type_id: u8,
     subpackets: Vec<Packet>
+}
+
+impl OperatorPacket {
+    fn value(&self) -> u64 {
+        match self.type_id {
+            OPERATOR_SUM => self.subpackets.iter().map(|sp| sp.value()).sum(),
+            OPERATOR_PRODUCT => self.subpackets.iter().map(|sp| sp.value()).product(),
+            OPERATOR_MINIMUM => self.subpackets.iter().map(|sp| sp.value()).min().unwrap(),
+            OPERATOR_MAXIMUM => self.subpackets.iter().map(|sp| sp.value()).max().unwrap(),
+            OPERATOR_GREATER_THAN => if self.subpackets[0].value() > self.subpackets[1].value() { 1 } else { 0 },
+            OPERATOR_LESS_THAN => if self.subpackets[0].value() < self.subpackets[1].value() { 1 } else { 0 },
+            OPERATOR_EQUAL => if self.subpackets[0].value() == self.subpackets[1].value() { 1 } else { 0 },
+            _ => panic!("unknown type_id: {}", self.type_id)
+        }
+    }
 }
 
 fn parse_version(input: BSlice<Msb0, u8>)-> IResult<BSlice<Msb0, u8>, u8> {
@@ -80,7 +110,7 @@ fn parse_packet(input: BSlice<Msb0, u8>)-> IResult<BSlice<Msb0, u8>, Packet> {
         alt((
             parse_literal_value_packet,
             parse_operator_packet
-        ))
+        )),
       ))(input).map(|(left, (version, content))| (left, Packet { version, content }))
 }
 
@@ -148,13 +178,20 @@ fn decode_hex(input: &str) -> Vec<u8> {
 pub(crate) fn solve(input: String) -> Result<(), Report> {
     let v = decode_hex(&input);
     let bits = v.view_bits::<Msb0>();
-    let packet = match parse_packet(BSlice(bits)) {
-        Ok((slice, packet)) if !slice.0.any() => packet,
-        Ok((slice, _)) => return Err(Report::msg(format!("Leftover non-zero bits: {:?}", slice))),
+    let packet = match all_consuming(
+        tuple((
+                  parse_packet,
+                  // Trailing 0 bits are okay
+                  many0(tag(BSlice(bits![0]))),
+        )))(BSlice(bits)) {
+        Ok((slice, (packet, _))) if slice.0.is_empty() => packet,
+        // all_consuming() won't return Ok if it doesn't consume all the data
+        Ok(_) => unreachable!(),
         Err(e) => return Err(Report::msg(format!("Failed to parse input: {:?}", e)))
     };
 
-    println!("sum of versions: {:?}", packet.sum_of_versions());
+    info!(day=16, part=1, answer=packet.sum_of_versions());
+    info!(day=16, part=2, answer=packet.value());
 
     Ok(())
 }
