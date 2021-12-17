@@ -10,3 +10,5 @@ tracing-subscriber = { version = "0.3.3", features = [ "std", "env-filter" ] }
 structopt = "0.3.25"
 itertools = "0.10.1"
 nom = "7.1.0"
+nom-bitvec = "0.2.0"
+bitvec = "0.22.3"
