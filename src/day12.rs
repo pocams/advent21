@@ -70,7 +70,7 @@ fn path_parser(i: &str) -> IResult<&str, Path> {
     )
 }
 
-fn walk(paths: &Vec<Path>, can_revisit_small: bool) -> Vec<Trip> {
+fn walk(paths: &[Path], can_revisit_small: bool) -> Vec<Trip> {
     let mut trips = vec![Trip { caves: vec![Cave::Start], can_revisit_small }];
     let mut complete_trips = vec![];
 
@@ -87,7 +87,7 @@ fn walk(paths: &Vec<Path>, can_revisit_small: bool) -> Vec<Trip> {
 
                 if a == trip.location() {
                     // This is a path we could potentially take
-                    if b.is_small() && trip.caves.contains(&b) {
+                    if b.is_small() && trip.caves.contains(b) {
                         if trip.can_revisit_small {
                             // This is our one chance to revisit a small cave
                             let mut new_trip = trip.with_next_cave(b.clone());

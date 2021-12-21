@@ -151,7 +151,7 @@ pub(crate) fn solve(input: String) -> Result<(), Report> {
 
     // This is a bit hinky, but whatever
     for row in show(&dots).split('\n') {
-        if row.len() > 0 {
+        if !row.is_empty() {
             info!(day=13, part=2, answer=row);
         }
     }

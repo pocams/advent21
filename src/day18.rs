@@ -171,7 +171,7 @@ fn parse_pair(depth: i32) -> impl Fn(&str) -> IResult<&str, Node> {
             alt((parse_pair(depth+1), parse_number(depth+1))),
             tag("]")
         ))(i).map(|(left, (_, a, _, b, _))| {
-            let n = NodeStruct { depth, data: Data::Pair(a.clone(), b.clone()) }.into_node();
+            let n = NodeStruct { depth, data: Data::Pair(a, b) }.into_node();
 
             (left, n)
         })
