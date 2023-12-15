@@ -13,6 +13,7 @@ use tracing::{debug, info};
 const MIN_OVERLAP: usize = 11;
 
 #[derive(Copy, Clone, Debug)]
+#[allow(clippy::upper_case_acronyms)]
 enum Transform {
     XYZ,
     XZY,
@@ -46,6 +47,7 @@ impl Transform {
 }
 
 #[derive(Copy, Clone, Debug)]
+#[allow(clippy::upper_case_acronyms)]
 enum Flip {
     None,
     X,

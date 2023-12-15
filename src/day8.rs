@@ -79,7 +79,7 @@ pub(crate) fn solve(input: String) -> Result<(), Report> {
 
     for case in cases {
         debug!("{:?}", case.all_digits);
-        let mut v = vec![""; 10];
+        let mut v = [""; 10];
 
         // The only 2-segment digit is 1
         v[1] = case.all_digits.iter().find(|&n| n.len() == 2).ok_or_else(|| eyre!("1 not found"))?;
